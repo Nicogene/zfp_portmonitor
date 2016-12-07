@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2014 iCub Facility
- * Authors: Ali Paikan
+ * Copyright (C) 2016 iCub Facility
+ * Authors: Nicolo' Genesio
  * CopyPolicy: Released under the terms of the LGPLv2.1 or later, see LGPL.TXT
  */
 
