@@ -27,26 +27,15 @@ yarp_prepare_plugin(zfp        TYPE ZfpMonitorObject
 
 if(NOT SKIP_zfp)
 
-# TBD: create a proper FindPackage
-if(WIN32)
-	find_path(ZFP_INCLUDE_LOCAL NAMES zfp.h HINTS $ENV{ZFP_DIR}/inc)
-	find_library(ZFP_LIBRARY NAMES ZFP libzfp HINTS $ENV{ZFP_DIR}/lib)
-else(WIN32)
-	find_path(ZFP_INCLUDE_LOCAL NAMES zfp.h HINTS $ENV{ZFP_DIR}/inc)
-	find_library(ZFP_LIBRARY NAMES ZFP libzfp.a HINTS $ENV{ZFP_DIR}/lib)
-endif(WIN32)
+find_package(ZFP REQUIRED)
 
-if(ZFP_INCLUDE_LOCAL AND ZFP_LIBRARY)
-  set(ZFP_FOUND TRUE)
-else()
-  set(ZFP_FOUND FALSE)
-endif()
-
-if(NOT ZFP_FOUND)
-	message(ERROR " ZFP library not found. Please set environment variable ZFP_DIR to the library location folder or remove this plugin from compilation.")
-	message("ZFP_DIR is $ENV{ZFP_DIR}! ") #to be removed
-	return()
-endif()
+if (ZFP_FOUND)
+        message("-- Found ZFP library: ${ZFP_LIBRARY}")
+        include_directories(${ZFP_INCLUDE_DIR})
+        else (ZFP_FOUND)
+        message("-- Did not find ZFP library.")
+        return()
+        endif (ZFP_FOUND)
 
 include_directories(${YARP_INCLUDE_DIRS} ${ZFP_INCLUDE_LOCAL})
 

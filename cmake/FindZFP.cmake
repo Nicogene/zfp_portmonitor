@@ -8,13 +8,16 @@
 # ZFP_FOUND, if false, you cannot build anything that requires ZFP
 
 ######################################################################## 
-find_path(ZFP_INCLUDE_DIR zfp.h /usr/include /usr/local/include $ENV{ZFP_ROOT} $ENV{ZFP_ROOT}/inc DOC "directory containing zfp/zfp.h for ZFP library")  
-find_library(ZFP_LIBRARY NAMES ZFP zfp PATHS /usr/lib /usr/local/lib $ENV{ZFP_ROOT}/lib $ENV{ZFP_ROOT} DOC "ZFP library file") 
- 
-if (WIN32 AND NOT CYGWIN) 
+
+if(WIN32)
 	set(CMAKE_DEBUG_POSTFIX "d") 
-	find_library(ZFP_DEBUG_LIBRARY NAMES ZFP${CMAKE_DEBUG_POSTFIX} zfp${CMAKE_DEBUG_POSTFIX} PATHS ${CMAKE_SOURCE_DIR}/../ZFP_wrappers/lib/ /usr/lib /usr/local/lib $ENV{ZFP_ROOT}/lib $ENV{ZFP_ROOT} DOC "ZFP library file (debug version)") 
-endif () 
+	find_library(ZFP_DEBUG_LIBRARY NAMES ZFP${CMAKE_DEBUG_POSTFIX} zfp${CMAKE_DEBUG_POSTFIX} PATHS $ENV{ZFP_ROOT}/lib $ENV{ZFP_ROOT} DOC "ZFP library file (debug version)")
+        find_path(ZFP_INCLUDE_DIR NAMES zfp.h HINTS $ENV{ZFP_ROOT}/inc)
+        find_library(ZFP_LIBRARY NAMES ZFP libzfp HINTS $ENV{ZFP_ROOT}/lib)
+else(WIN32)
+        find_path(ZFP_INCLUDE_DIR NAMES zfp.h HINTS $ENV{ZFP_ROOT}/inc)
+        find_library(ZFP_LIBRARY NAMES ZFP libzfp.a HINTS $ENV{ZFP_ROOT}/lib)
+endif(WIN32)
  
  
 if (ZFP_INCLUDE_DIR AND ZFP_LIBRARY) 
@@ -29,16 +32,6 @@ else ()
   set(ZFP_DEBUG_LIBRARY ${ZFP_LIBRARY})
 endif () 
  
-if (ZFP_FOUND) 
-	if (NOT ZFP_FIND_QUIETLY) 
-		message(STATUS "Found ZFP library: ${ZFP_LIBRARY}") 
-		message(STATUS "Found ZFP include: ${ZFP_INCLUDE_DIR}") 
-	endif () 
-else () 
-	if (ZFP_FIND_REQUIRED) 
-		message(FATAL_ERROR "Could not find ZFP") 
-	endif () 
-endif () 
 
 # TSS: backwards compatibility
 set(ZFP_LIBRARIES ${ZFP_LIBRARY}) 
